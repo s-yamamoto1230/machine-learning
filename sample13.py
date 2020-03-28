@@ -11,7 +11,7 @@ print(df)
 #欠損地確認
 print(df.isnull())  #欠損部分はtureで出てくる
 
-#欠損の数を求める
+#欠損値の数を求める
 print(df.isnull().sum())    #tureの数を数える
 
 #欠損地のある行を削除(あまり使わない)  dropna()

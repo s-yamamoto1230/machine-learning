@@ -1,4 +1,4 @@
-#欠損地処理  NaN
+#欠損値処理  NaN
 import pandas as pd
 import numpy as np
 

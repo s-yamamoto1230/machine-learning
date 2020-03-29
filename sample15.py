@@ -1,4 +1,4 @@
-#データの可視化  Matplotlib
+#Matplotlibの基本
 import matplotlib.pyplot as plt
 import numpy as np
 

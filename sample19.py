@@ -23,7 +23,7 @@ plt.show()      #横に膨らんでいる所ほどデータが密集している
 sns.swarmplot("day","total_bill",data=tips,hue="sex",dodge=True)    #hue→可視化の切り口をさらに追加。dodge→追加した切り口を重ねるかどうか。Trueで重ねない。
 plt.show()
 
-#カテゴリごとにデータの分布を表示  boxplot()
+#カテゴリごとにデータの分布を表示(箱ひげ図)  boxplot()
 sns.boxplot(tips.day,tips.tip,hue=tips.sex)
 plt.show()      #箱の中央線は中央値。黒店は外れ値。
 

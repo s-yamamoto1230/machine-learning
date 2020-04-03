@@ -46,3 +46,12 @@ plt.show()
 print()
 print("運賃の出現回数表示(最後から15行)")
 print(train["Fare"].value_counts().tail(15))    #グループ化したほうが良い
+
+#Surbivedと他の列との関係性を可視化
+sns.heatmap(train.corr(),cmap="summer",annot=True)  #annot→ヒートマップの中に値を入れるかどうか
+plt.show()
+
+#男女それぞれの生存者数を棒グラフで表示
+sum_survived = train.groupby(["Sex"])["Survived"].sum() #trainデータのSurvived列の和を性別毎に求め可視化。
+sns.barplot(sum_survived.keys(),sum_survived.values)
+plt.show()

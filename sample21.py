@@ -1,4 +1,4 @@
-#データの前処理
+#データの前処理練習
 
 #目的変数→予測したい変数
 #説明変数→目的変数を予測するためにモデルに投入する変数
@@ -55,3 +55,27 @@ plt.show()
 sum_survived = train.groupby(["Sex"])["Survived"].sum() #trainデータのSurvived列の和を性別毎に求め可視化。
 sns.barplot(sum_survived.keys(),sum_survived.values)
 plt.show()
+
+data_count = train.groupby(["Sex","Survived"])["Survived"].count()    #SurvivedをSexとSurvivedで集計し、棒グラフで表示
+sns.barplot(data_count.keys(),data_count.values)
+plt.show()
+
+#男女のそれぞれの生存率を求める
+print()
+print("男女のそれぞれの生存率")
+print(train.groupby(["Sex"])["Survived"].mean())
+#-----------------------------------------------------------
+#港ごとの生存者数、死亡者数を調べる
+print()
+print("港ごとの生存者数、死亡者数")
+print(train.groupby(["Embarked","Survived"])["Survived"].count())       #0→死亡 1→生存
+
+#港ごとの生存者数、死亡者数を可視化
+data_count = train.groupby(["Embarked","Survived"])["Survived"].count()
+sns.barplot(data_count.keys(),data_count.values)
+plt.show()
+
+#港ごとの生存率を計算
+print()
+print("港ごとの生存率")
+print(train.groupby(["Embarked"])["Survived"].mean())

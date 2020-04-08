@@ -1,6 +1,8 @@
 #機械学習モデルの構築と評価
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 #pickleをデータフレームに復元
 train = pd.read_pickle("titanic_train.pkl")     #答えのあるデータ
@@ -56,3 +58,34 @@ y = train["Survived"]                               #目的変数として、tra
 cv_resrlt = cross_val_score(model,x,y,cv=kf)        #予測に使うモデル,説明変数,目的変数,及び作成したKFoldのパラメータ引数に与える
 print(cv_resrlt)
 print("平均精度:{}".format(cv_resrlt.mean()))       #分割数の分だけ精度が得られるので、平均値を取れば全体の精度が確認可能
+
+#-----------------------
+#グリッドサーチ実装
+#-----------------------
+from sklearn.model_selection import GridSearchCV    #GridSearchCVのimport
+param = {'n_estimators':range(100,1000,100)}        #サーチするパラメータを定義→n_estimatorsを100～900まで100刻み毎
+GS_rf = GridSearchCV(estimator=RandomForestClassifier(random_state=0),param_grid=param,verbose=True,cv=5)   #verbose=Trueで実行状況が標準出力される
+GS_rf.fit(x,y)      #学習
+print("ベストスコア:{}".format(GS_rf.best_score_))
+print("最適なパラメータ:{}".format(GS_rf.best_estimator_))
+
+#------------------------------
+#テストデータに対して予測する
+#------------------------------
+model = GS_rf.best_estimator_                               #グリッドサーチで得られたベストなモデルを用いて分類を行う
+model.fit(train[train.columns[1:]],train[train.columns[0]]) #学習
+test_prediction = model.predict(test)                       #テストデータに対する予測
+#kaggle側の要求に合わせて予測結果をまとめる
+passenger_id = np.arange(892,1310)
+test_result = pd.DataFrame({'PassengerId':passenger_id,'Survived':test_prediction}) #PassengerIdnと予測結果をデータフレーム化
+print(test_result.head(10))
+
+#生成したデータフレームをcsvとして保存
+test_result.to_csv("titanic_forsubmisson.csv",index=False)
+
+#--------------------------------------------------------------------------------------------------
+#分類に用いた説明変数について、それぞれが分類に貢献した度合いをfeature_importances_で取得
+#--------------------------------------------------------------------------------------------------
+feature_importances = pd.DataFrame({"feature_importances":model.feature_importances_})
+sns.barplot(tr_train_X.columns,feature_importances["feature_importances"])
+plt.show()
